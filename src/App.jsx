@@ -4,8 +4,23 @@ const idsFetch = fetch("/ids.json").then(async (res) => ({
   data: res.status === 200 ? await res.json() : null,
 }));
 
+const cachedFetches = {};
+const cachedFetch = (url) => {
+  if (!cachedFetches[url]) {
+    cachedFetches[url] = fetch(url).then(async (res) => ({
+      status: res.status,
+      data: res.status === 200 ? await res.json() : null,
+    }));
+  }
+  return cachedFetches[url];
+};
+
 const Detail = ({ id }) => {
-  return <div>{id}</div>;
+  const data = use(cachedFetch(`/${id}.json`));
+
+  console.log(`Rendering Detail ${id}`);
+
+  return <div>{JSON.stringify(data)}</div>;
 };
 
 const Names = () => {
