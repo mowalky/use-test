@@ -1,4 +1,4 @@
-import { experimental_use as use } from "react";
+import { experimental_use as use, Suspense } from "react";
 
 const getGPS = new Promise((resolve) => {
   navigator.geolocation.getCurrentPosition((position) => {
@@ -17,7 +17,9 @@ const GPS = () => {
 function App() {
   return (
     <div className="App">
-      <GPS />
+      <Suspense>
+        <GPS />
+      </Suspense>
     </div>
   );
 }
